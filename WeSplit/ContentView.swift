@@ -27,7 +27,7 @@ struct ContentView: View {
         
         let guests: Double = Double(guestNumber + 2)
         
-        let toPay: Double = sum / guests
+        let toPay: Double = round( ( sum / guests ) * 100 ) / 100
         
         return (sum: "Total to pay \(sum)", topay: "\(toPay)")
     }
@@ -40,8 +40,12 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
+                
+                
+                
                 Form{
-                    Section {
+                   
+                    Section (header: Text("Bill details")) {
                         
                         Picker("Number of people", selection: $guestNumber) {
                             ForEach(2 ..< 100) {
@@ -52,14 +56,21 @@ struct ContentView: View {
                             .keyboardType(.decimalPad)
                     }
                     
-                    Section{
-                        Picker(selection: $tipPercent, label: Text("Tip amount"), content: {
+                    
+                    
+                    
+                    Section (header: Text("Tip percentage")){
+                    
+                        Picker("Tip percent", selection: $tipPercent) {
                             ForEach (0 ..< tips.count) {
                                 Text("\(self.tips[$0])%")
                             }
-                        })
+                        }
                         .pickerStyle(SegmentedPickerStyle())
+                        .labelsHidden()
                     }
+                
+                    
                 }
                 
                 
@@ -74,7 +85,7 @@ struct ContentView: View {
                     Spacer()
                         .frame(height: 40.0)
                        
-                    Text("\(perPerson.topay)")
+                    Text("£ \(perPerson.topay)")
                         .font(.title)
                         .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                     Text("per person")
